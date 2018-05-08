@@ -1,0 +1,78 @@
+---
+title: "Project 15 Data"
+output: html_notebook
+---
+*This notebook shows a working knowledge of data analysis to be improved upon for the duration of graduate school.*
+***
+#### Here's a Python simulation problem that involves analyzing simulated data:
+
+![Python Sensor Problem Simulation 1](/Users/sossamonj15/Desktop/Project 15/Sensor Simulation 1.jpeg)
+![Python Sensor Problem Simulation 2](/Users/sossamonj15/Desktop/Project 15/Sensor Simulation 2.jpeg)
+![Python Sensor Problem Simulation 3](/Users/sossamonj15/Desktop/Project 15/Sensor Simulation 3.jpeg)
+![Python Sensor Problem Simulation 4](/Users/sossamonj15/Desktop/Project 15/Sensor Simulation 4.jpeg)
+![Python Sensor Problem Simulation 5](/Users/sossamonj15/Desktop/Project 15/Sensor Simulation 5.jpeg)
+$\textit{The reason it is shown as images is I am not skilled enough (YET!) to knit this into R Notebooks or publish Python coding.}$
+***
+#### Here's information from gathering and analyzing data sets from the first part of the semester:
+![Male Height Stats](/Users/sossamonj15/Desktop/Project 15/Male Height Stats.jpeg)
+![Extracting from Vectors](/Users/sossamonj15/Desktop/Project 15/Extracting from Vectors.jpeg)
+![Working with Data Frames](/Users/sossamonj15/Desktop/Project 15/Working with Data Frames.jpeg)
+![Extracting from Data Frames](/Users/sossamonj15/Desktop/Project 15/Extracting from Data Frames.jpeg)
+![Finding Quantiles from Data](/Users/sossamonj15/Desktop/Project 15/Finding Quantiles from Data.jpeg)
+![Interpreting Data](/Users/sossamonj15/Desktop/Project 15/Interpreting Data.jpeg)
+![Interpreting Data with Histograms](/Users/sossamonj15/Desktop/Project 15/Interpreting Data with Histograms.jpeg)
+![Organizing Imported Data](/Users/sossamonj15/Desktop/Project 15/Organizing Imported Data.jpeg)
+![Organizing Imported Data 2](/Users/sossamonj15/Desktop/Project 15/Organizing Imported Data 2.jpeg)
+![Organizing Imported Data 3](/Users/sossamonj15/Desktop/Project 15/Organizing Imported Data 3.jpeg)
+![Working with favstats function](/Users/sossamonj15/Desktop/Project 15/Working with favstats function.jpeg)
+
+#### Here's information from visualizing data from the first part of the semester:
+![Visualizing Data with Pie Charts](/Users/sossamonj15/Desktop/Project 15/Visualizing Data with Pie Charts.jpeg)
+![Displaying Density Curves](/Users/sossamonj15/Desktop/Project 15/Displaying Density Curves.jpeg)
+![Displaying Data with Charts](/Users/sossamonj15/Desktop/Project 15/Displaying Data with Charts.jpeg)
+![Displaying Data Examples](/Users/sossamonj15/Desktop/Project 15/Displaying Data Examples.jpeg)
+***
+##### Working with statistical variables - high school level focused lesson plan
+
+Please click on the link to see work:
+[Statistical Variables Teaching Lesson](http://rpubs.com/J_Sossamon/Statistical_Variables_Lesson)
+
+##### Doing basic linear regression
+
+Please click on the link to see work:
+[Linear Regression](http://rpubs.com/J_Sossamon/384745)
+
+##### Doing multiple linear regression
+
+Please click on the link to see work:
+[Multiple Linear Regression](http://rpubs.com/J_Sossamon/386373)
+
+##### Working with Shiny for data visualization
+
+Please click on the links to see work:
+[ShinyAppExample1](https://jsoss2018.shinyapps.io/Shiny3/)
+[ShinyAppExample2](https://jsoss2018.shinyapps.io/Project11Part2ShinyApp/)
+***
+#### Calling Python from R (example)
+```{r setup, include=FALSE}
+library(reticulate)
+use_python("/usr/local/bin/python")
+knitr::knit_engines$set(python = reticulate::eng_python)
+```
+
+```{python}
+import pandas
+flights = pandas.read_csv("flights.csv")
+flights = flights[flights['dest'] == "ORD"]
+flights = flights[['carrier', 'dep_delay', 'arr_delay']]
+flights = flights.dropna()
+```
+
+```{r, fig.width=7, fig.height=3}
+library(ggplot2)
+ggplot(py$flights, aes(carrier, arr_delay)) + geom_point() + geom_jitter()
+```
+
+
+
+
