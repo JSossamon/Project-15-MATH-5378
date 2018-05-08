@@ -1,0 +1,40 @@
+---
+title: "Project5Part2_R_Notebook"
+author: Janet Sossamon
+output: html_notebook
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook.
+
+
+Question 1:
+A six-sided fair die is rolled. Find the probability of getting an odd number or a prime number.
+```{r Question 1, echo=TRUE}
+#not mutually exclusive, so P(oddORprime)=P(odd)+P(prime)-P(oddANDprime)
+p_odd = 1/2
+p_prime = 1/2
+p_oddANDprime = 1/3
+p_oddORprime = p_odd + p_prime - p_oddANDprime
+cat('Probability of odd OR prime is',p_oddORprime)
+```
+Question 2:
+In a group of 90 players, 40 are wearing blue T-shirts, 30 are wearing red T-shirts and 20 are wearing green T-shirts. Find the probability that a person picked at random is wearing a red or a green T-shirt.
+```{r}
+#mutually exclusive sets, so P(redORgreen)=P(red)+P(green)
+p_red = 30/90
+p_green = 20/90
+p_redORgreen = p_red + p_green
+cat('Probability of red OR green T-shirt is',p_redORgreen)
+```
+Question 3:
+![Q_3](Users/sossamonj15/Desktop/GRAD School - MATH/1Tech-Aided Math - Spring 2018/Project5Part2Notebook/Q_3.jpeg)
+```{r}
+
+```
+
+Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Cmd+Option+I*.
+
+When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Cmd+Shift+K* to preview the HTML file). 
+
+The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
+
