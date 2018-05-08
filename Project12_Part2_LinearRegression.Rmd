@@ -1,0 +1,46 @@
+---
+title: "Linear Regression Exploration"
+output: html_notebook
+---
+In R, the lm(), or "linear model," function can be used to create a simple regression model. We will be using the dataset titled "Regression.csv".
+
+Note that the two most commonly used parameters in linear regression models are formula (describes the model) and data (this is the variable that contains the dataset). It is recommended that you save a newly created linear model into a variable so that it can be used in subsequent calculations efficiently!
+
+The sample code below demonstrates how to create a linear model and save it into a variable...particularly, we are using the unemployment rate (UNEM) to predict the fall enrollment (ROLL). First, import the dataset and store it in R as "Roll_Unem":
+```{r}
+Roll_Unem <- read.csv("Regression.csv")
+```
+Then, run a linear model on the two variables "ROLL" and "UNEM":
+```{r}
+lm(ROLL~UNEM, Roll_Unem)
+```
+From this output, we have determined that the intercept is 3957 and the coefficient for the unemployment rate is 1134. Therefore, the complete regression equation is:
+Fall Enrollment = 3957 + 1134 * Unemployment Rate
+
+This equation tells us that the predicted fall enrollment for the University of New Mexico will increase by 1134 students for every one percent increase in the unemployment rate.
+
+Now, suppose that our research question asks what the expected fall enrollment is, given this year's unemployment rate of 9%. As follows, we can use the regression equation to calculate the answer to this question:
+```{r}
+3957 + 1134 * 9
+```
+Naturally, simple linear regression can be used to do much more than just calculate expected values. Here, the summary(OBJECT) function is a useful tool. It is capable of generating most of the statistical information that one would need to derive from a linear model. The example below demonstrates the use of the summary function on a linear model variable...
+
+We save the linear model as "LinearModel" and find the summary as follows:
+```{r}
+LinearModel <- lm(ROLL~UNEM, Roll_Unem)
+summary(LinearModel)
+```
+So, the summary(OBJECT) function has provided us with a wealth of information, including t-test, F-test, R-squared, residual, and significance values. All of this data can be used to answer important research questions related to our linear model. Yet again, the summary(OBJECT) function proves to be a valuable resource. It is worth remembering and using when conducting a variety of analyses in R.
+
+Now, let's create a simple plot of the two variables...then, we can draw a regression line by using the abline command:
+```{r}
+plot(Roll_Unem$ROLL, Roll_Unem$UNEM)
+abline(lm(UNEM~ROLL, Roll_Unem))
+```
+
+Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Cmd+Option+I*.
+
+When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Cmd+Shift+K* to preview the HTML file). 
+
+The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
+
