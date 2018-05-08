@@ -1,0 +1,46 @@
+---
+title: "Multiple-Variable Linear Regression"
+output:
+  html_document:
+    df_print: paged
+---
+
+R provides comprehensive support for multiple linear regression.
+
+We shall consider the dataset "Regression.csv", which includes historical data on college enrollment numbers. Rarely in the real world is there ever a correlation between only two variables. Most of the time, several variables interact with one another in a predictable manner.
+
+So, let's first import the dataset:
+```{r}
+regression <- read.csv("Regression.csv")
+```
+Now, we will use the lm() command in R to evaluate the linear regression of multiple variables (unemployment rate, high school graduates, and income) and the plot() command to provide checks for heteroscedasticity, normality, and influential observerations with diagnostic plots:
+```{r}
+fit <- lm(regression$ROLL ~ regression$UNEM + regression$HGRAD + regression$INC, data=regression)
+fit
+layout(matrix(c(1,2,3,4),2,2))
+linearmodel = plot(fit)
+linearmodel
+```
+It is clear what the regression equation is, and now we will predict the enrollment if the
+Unemployment Rate = 4.1%
+High School Graduates = 17,231
+Income = $3,000
+(Be sure to call up the variable "Enrollment" to print out the results!)
+```{r}
+UnemploymentRate = 4.1
+HighSchoolGraduates = 17231
+Income = 3000
+
+Enrollment = -9153.2545 + UnemploymentRate * 450.1245 + HighSchoolGraduates * 0.4065 + Income * 4.2749
+
+Enrollment
+```
+Now, we will use more plot functions to compare linear models to include or exclude one of the three influencing variables:
+```{r}
+fit1 <- lm(regression$ROLL ~ regression$UNEM + regression$HGRAD + regression$INC, data=regression)
+fit2 <- lm(regression$ROLL ~ regression$UNEM + regression$HGRAD)
+fit3 <- lm(regression$ROLL ~ regression$HGRAD + regression$INC)
+fit4 <- lm(regression$ROLL ~ regression$UNEM + regression$INC)
+anova(fit1, fit2, fit3, fit4)
+```
+Now, the analysis of the data is up to you!
