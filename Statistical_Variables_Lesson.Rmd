@@ -1,0 +1,102 @@
+---
+title: "Relationships Between Statistical Variables"
+author: "J.Sossamon"
+output:
+  html_document:
+    df_print: paged
+---
+
+**Directions:** Go through the code results and answer the guiding questions. Afterward, either type a summary or create a summary video of your findings and answer the essential question...*Why should I be careful when interpreting relationships between variables causally?*
+
+>"Definition of Statistics: The science of producing unreliable facts from reliable figures." -Evan Esar
+
+***
+
+#The Data - SAT scores by state
+The data which is being used is compiled SAT data for the 50 states in the USA. It contains expenditures for education (expend), student:teacher ratios (ratio), teacher salaries (salary), percentage of students who took the SAT (frac), verbal scores (verbal), math scores (math), and overall scores (sat) for each state. 
+
+```{r include=FALSE}
+require(mosaic)
+require(mosaicData)
+```
+
+###Here is the originial data sorted alphabetically by state:
+
+```{r echo=FALSE}
+SAT
+```
+
+###Here is the original data sorted in ascending order by percentage students taking the test then by SAT score:
+
+```{r echo=FALSE}
+attach(SAT)
+frac_sat_datasort <- SAT[order(frac, sat),]
+detach(SAT)
+frac_sat_datasort
+```
+
+***
+
+#Question set 1
+
+####a) What possible factors could affect SAT scores based on the table above?
+
+####b) Based on the graph below comparing expenditures vs. overall SAT scores, a federal education committee concluded that states spending more on education typically do worse on the SAT. They made a decision to cut funding to states that had low SAT scores in an effort to increase SAT scores nationwide. Do you think this was a wise decision based on good data? Why or why not?
+
+```{r}
+xyplot(sat~expend, data=SAT, xlab='Expenditures on Education', ylab='Overall SAT Score')
+```
+
+***
+
+#Question set 2
+
+####a) Explore other factors that are confusing the data of education expenditures, such as percentage of students actually taking the test or student to teacher ratio for classroom instruction. Also consider those factors and how they relate to the test scores.
+
+```{r}
+xyplot(expend~frac, data=SAT, xlab='% of Students Taking SAT', ylab='Expenditures on Education')
+xyplot(expend~ratio, data=SAT, xlab='Student:Teacher Ratio', ylab='Expenditures on Education')
+xyplot(sat~frac, data=SAT, xlab='% of Students Taking SAT', ylab='Overall SAT Score')
+xyplot(sat~ratio, data=SAT, xlab='Student:Teacher Ratio', ylab='Overall SAT Score')
+```
+
+####b) What patterns begin to emerge from the data when viewed from the above perspectives? Based on these patterns, would you change your answer to Question 1b at this point in time?
+
+####c) You should have noticed a difference in the scatterplots involving Percentage of Students Taking Test vs. Student:Teacher Ratio -- there were no correlations for ratio but an emerging correlation for students taking the test. What percentage was a dividing point noticed in the above plots involving students taking the test?
+
+***
+
+#Question set 3
+
+####a) It is interesting to look at the original plot from Question 1b if we place the states into two groups depending on whether more or fewer than 40% of students took the SAT test:
+
+```{r}
+SAT <- mutate(SAT, fracGroup=derivedFactor(hi_percent_took_SAT=(frac>40), lo_percent_took_SAT=(frac<=40)))
+xyplot(sat~expend|fracGroup, data=SAT, type=c("p", "r"), xlab='Expenditures on Education', ylab='Overall SAT Score')
+```
+
+####b) Here is a color-coded version of the plot, taking the percentage of students who actually took the SAT into consideration:  *note that pink=low percentage taking test and blue=high percentage taking test*
+
+```{r}
+xyplot(sat~expend, groups=fracGroup, data=SAT, type=c("p", "r"), xlab='Expenditures on Education', ylab='Overall SAT Score')
+```
+
+####c) Based on the plots above, what **valid** conclusions may be made from the SAT data? 
+
+####d) How do changing variables affect your opinions when statistical conclusions are presented in our government, the media, and surveys? Would you think twice before forming an opinion in the future based on your experience with the SAT score exercises?
+
+***
+
+> “Facts are stubborn things, but statistics are pliable.” 
+― Mark Twain
+
+##So, back to our essential question: **Why should I be careful when interpreting relationships between variables causally?**
+
+###Take a look at the following video by copying and pasting this link into your web browser:
+###[CorrelationVSCausation](https://www.youtube.com/watch?v=5zyruPbgxyM)
+###*Please answer this question by researching a little on your own via internet sources -- 'Does correlation imply causation?'*
+
+#Submit your summary AND your typed answers to Question sets 1,2,&3 to my email no later than Friday (end of school day).
+
+
+
