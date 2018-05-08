@@ -1,0 +1,134 @@
+# -*- coding: utf-8 -*-
+"""
+Spyder Editor
+
+This is a temporary script file.
+"""
+
+import numpy as U
+import bisect as B
+import matplotlib.pyplot as P
+
+L = 100              #length of interval
+D = 5                #number of points per interval - DENSITY
+M = 100000           #number of simulations done
+N = U.int(D*(L + 1)) #number of points TOTAL - make sure it's an integer!!
+
+iVec = U.zeros(M, dtype=U.uint64)                  #create vector size M for 1st,last indices of sets intersecting S
+ptVec = U.sort(U.random.uniform(0,L+1,N))          #create sorted vector of N number of random points on [0,L+1]
+
+def find_ge(a, x):  #'Function to find leftmost value greater than or equal to x'
+    i = B.bisect_left(a, x)
+    if i != len(a):
+        final = i
+    else: 
+        final = 1
+    return final
+    
+def find_le(a, x):  #'Function to find rightmost value less than or equal to x'
+    i = B.bisect_right(a, x)
+    if i:
+        final = i-1
+    else: 
+        final = 1
+    return final
+
+##Perform random simulation to get intersecting sets:
+for mm in range(0, M):
+    x = U.random.uniform(0,L)   #generate a random floating point between 0 and L
+    i = find_ge(ptVec, x)       #find index of leftmost point in [0,L]
+    j = find_le(ptVec, x+1)     #find index of rightmost point in [0,L]
+    iVec[mm] = i*N + j          #put indices in "trick" formula so they can be extracted as needed later
+    if x < ptVec[i] and ptVec[i] <= ptVec[j] and ptVec[j] < x+1:
+        iVec[mm] = iVec[mm]     #assign the values for all valid entries
+    else:
+        iVec[mm] = -1           #assign negative values for invalid entries
+
+iVecSort = U.sort(iVec)         #sort ascending for iVec
+
+##Creating histogram for the probability distribution of possible sets
+uVec, setCount = U.unique(iVecSort, return_counts=True)     #take care of counting sets and the unique ones
+u = len(uVec)                                           #obtain the number of unique sets
+
+print("The number of different possible sets of intersections is ",u)
+print("")
+# print("The number of times unique set appears in iVec is ",setCount)
+# print("")
+
+P.hist(setCount, bins=50)
+P.title("Probability Distribution for Number of Times Each Distinct Set is Chosen")
+P.show()
+
+##Finding the number of distinct maximal sets:
+lVec = uVec // N   #extract index of first value in each set...sorted by default
+rVec = uVec % N    #extract index of last value in each set...secondary-sorted by default
+
+mVec = U.ones(u, dtype=bool)
+mVec[:-1] = (lVec[1:] - lVec[:-1]) > 0
+
+
+lmVec = lVec[mVec]
+rmVec = rVec[mVec]
+u1 = lmVec.size
+
+MVec = U.ones(u1, dtype=bool) 
+MVec[1:] = (rmVec[1:] - rmVec[:-1]) > 0
+        
+nMax = U.sum(MVec)       #this is the number of maximal sets
+print("The number of maximal sets is ",nMax)
+
+##################
+P.plot(ptVec, 'ro', markersize=0.5)
+P.title("Random Points Along Total Interval")
+P.xlabel("Point Values")
+P.ylabel("Place Along Total Interval")
+P.show()
+
+DiffSort = U.sort(U.diff(ptVec))
+maxDiff = U.ndarray.max(DiffSort)
+print("The maximum difference between random points is ",maxDiff)
+
+zeroCount = DiffSort > 1  #find entries in DiffSort that are greater than 1
+zeroCountList = zeroCount.tolist()
+print("The number of empty intervals is ",zeroCountList.count(True))
+
+##################
+
+#Note: using MVec as index only pulls the "ones" for this eqn
+mIndexVec = U.where(mVec)[0]                  #gives indices for all the values in mVec 
+maxVec = uVec[mIndexVec[MVec]]                #selects the unique sets that are maximal sets
+maxSetCount = setCount[mIndexVec[MVec]]       #create vector of counts for number of times maximal set appears in iVec
+
+P.hist(maxSetCount, bins=50)
+P.title("Probability Distribution for Number of Times Maximal Set is Chosen")
+P.show()
+
+##Enable computation of distribution of the number of times any particular point occurs in a set of sets:
+lVec = iVec // N   
+rVec = iVec % N 
+
+cntPtVec = U.zeros(N)      #Count of the number of sets in iVec which contain ptVec
+for mm in range(0,M-1):
+    cntPtVec[lVec[mm]:rVec[mm+1]] = cntPtVec[lVec[mm]:rVec[mm+1]] + 1
+
+P.hist(cntPtVec, bins=50)
+P.title("Distribution of Number of Times Any Particular Point Occurs in a Set of Sets")
+P.show()
+
+cntUniquePtVec = U.zeros(N)   #Count of the number of sets in uVec which contain each point in ptVec
+luVec = uVec // N
+ruVec = uVec % N
+for mm in range(0,u-1):
+    cntUniquePtVec[luVec[mm]:ruVec[mm+1]] = cntUniquePtVec[luVec[mm]:ruVec[mm+1]] + 1
+        
+P.hist(cntUniquePtVec, bins=50)
+P.title("Distribution of the Number of Distinct Sets that Contain Each Point in S")
+P.show()
+
+cntMaxPtVec = U.zeros(N)    #Count of the number of sets in maxVec that contain each point in ptVec
+for mm in range(0,u1-1):
+    cntMaxPtVec[lmVec[mm]:rmVec[mm+1]] = cntMaxPtVec[lmVec[mm]:rmVec[mm+1]] + 1
+        
+P.hist(cntMaxPtVec, bins=50)
+P.title("Distribution of the Number of Distinct Maximal Sets that Contain Each Point in S")
+P.show()
